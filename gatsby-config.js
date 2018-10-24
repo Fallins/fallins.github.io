@@ -226,5 +226,5 @@ module.exports = {
       }
     }
   ],
-  pathPrefix: "/fallins.github.io",
+  // pathPrefix: "/fallins.github.io",
 };
