@@ -1,0 +1,1010 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[PersonalBlog - a blog starter for GatsbyJS]]></title><description><![CDATA[PersonalBlog is a GatsbyJS starter.]]></description><link>https://gatsby-starter-personal-blog.greglobinski.com</link><generator>RSS for Node</generator><lastBuildDate>Wed, 24 Oct 2018 07:09:05 GMT</lastBuildDate><item><title><![CDATA[Basics of react and react-router (Part II)]]></title><description><![CDATA[Fragments React 16.2 Feature
+可以不用額外包一層div HOC(High Order Component) 本質上只是一個函數，可以回傳 JSX、Stateless and Stateful component
+透過 HOC…]]></description><link>https://gatsby-starter-personal-blog.greglobinski.com/react-note-part2/</link><guid isPermaLink="false">https://gatsby-starter-personal-blog.greglobinski.com/react-note-part2/</guid><content:encoded>&lt;h2&gt;Fragments&lt;/h2&gt;
+&lt;p&gt;React 16.2 Feature
+可以不用額外包一層div&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;// 原來的寫法
+&amp;lt;div&amp;gt;        
+  &amp;lt;p&amp;gt;First&amp;lt;/p&amp;gt;
+  &amp;lt;p&amp;gt;Second&amp;lt;/p&amp;gt;
+  &amp;lt;p&amp;gt;Thired&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+
+// 新的用法
+&amp;lt;&amp;gt;
+  &amp;lt;p&amp;gt;First&amp;lt;/p&amp;gt;
+  &amp;lt;p&amp;gt;Second&amp;lt;/p&amp;gt;
+  &amp;lt;p&amp;gt;Thired&amp;lt;/p&amp;gt;
+&amp;lt;/&amp;gt;
+
+// 概念
+// 利用 HOC 直接回傳其 children 
+export default (props) =&amp;gt; props.children&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h2&gt;HOC(High Order Component)&lt;/h2&gt;
+&lt;p&gt;本質上只是一個函數，可以回傳 JSX、Stateless and Stateful component
+透過 HOC 可以將一些固定的邏輯抽取出來，或是增刪修改 state 或 props 。&lt;/p&gt;
+&lt;h4&gt;e.g.&lt;/h4&gt;
+&lt;p&gt;僅是把收到的 children 再回傳出去，也就是回傳 JSX&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;// Auxiliary(與 react 16.2 Fragments 一樣的作用)
+
+export default (props) =&amp;gt; props.children&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;Usage&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;render() {
+    return (
+      &amp;lt;Aux&amp;gt;
+        &amp;lt;Cockpit click={this.Addhandler}/&amp;gt;
+        &amp;lt;ErrorBoundary&amp;gt;
+          &amp;lt;Persons persons={this.state.persons}/&amp;gt;
+        &amp;lt;/ErrorBoundary&amp;gt;
+      &amp;lt;/Aux&amp;gt;
+    );
+  }&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;e.g.&lt;/h4&gt;
+&lt;p&gt;回傳一個 stateless component，作用是把傳進來的組件再包裹一層使用者自訂的 class &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;import React, { Component } from &amp;#39;react&amp;#39;
+
+const withClass = (Comp, classes) =&amp;gt; {
+    return props =&amp;gt; (
+        &amp;lt;div className={classes}&amp;gt; 
+            &amp;lt;Comp {...props}/&amp;gt;
+        &amp;lt;/div&amp;gt;
+    )
+}
+
+export default withClass&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;Usage&lt;/h4&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;export default withClass(App, styles.App);&lt;/code&gt;&lt;/p&gt;
+&lt;h2&gt;PropTypes&lt;/h2&gt;
+&lt;p&gt;React 透過 PropTypes 來做類型檢測的功能。
+React v15.5 開始，已把 PropTypes 拆做獨立的 library。
+使用上需要另外安裝 &lt;code class=&quot;language-text&quot;&gt;npm install --save prop-types&lt;/code&gt;&lt;/p&gt;
+&lt;h4&gt;usage&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;import PropTypes from &amp;#39;prop-types&amp;#39;
+
+const Example = (props) =&amp;gt; {
+  return (
+    &amp;lt;div&amp;gt;      
+      &amp;lt;p&amp;gt;{props.name}&amp;lt;/p&amp;gt;
+      &amp;lt;p&amp;gt;{props.age}&amp;lt;/p&amp;gt;
+    &amp;lt;/div&amp;gt;
+  )
+}
+
+Example.propTypes = {
+  name: PropTypes.string,
+  age: PropTypes.number
+}
+
+export default Example&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.css88.com/react/docs/typechecking-with-proptypes.html&quot;&gt;PropTypes 中文文檔&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;React-router(V4) note&lt;/h1&gt;
+&lt;h2&gt;Install&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;npm install --save react-router-dom&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h2&gt;Introduction&lt;/h2&gt;
+&lt;h4&gt;react-router 與 react-router-dom 的差別&lt;/h4&gt;
+&lt;p&gt;react-router-dom 是基於 react-router 並針對瀏覽器環境加入一些功能，像是 Link、BrowserRouter和HashRouter。其他與 react-router 中相同的方法則是將其再導出而已。所以瀏覽器環境下使用 react-router-dom 即可。&lt;/p&gt;
+&lt;h2&gt;Usage&lt;/h2&gt;
+&lt;p&gt;需要在最外層使用 HashRouter 或 BrowserRouter，差別如下:&lt;/p&gt;
+&lt;h4&gt;HashRouter&lt;/h4&gt;
+&lt;p&gt;通過hash值來對路由進行控制，所以網址內會有個#&lt;/p&gt;
+&lt;h4&gt;BrowserRouter&lt;/h4&gt;
+&lt;p&gt;基於HTML5 history API (pushState, replaceState, popState)，但可能會有相容性的問題&lt;/p&gt;
+&lt;h4&gt;Route&lt;/h4&gt;
+&lt;p&gt;用來控制對應的路由顯示對應的組件，常用的屬性exact、path 以及 component。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;&amp;lt;Route exact path=&amp;quot;/&amp;quot; component={Homw} /&amp;gt;
+&amp;lt;Route path=&amp;quot;/about&amp;quot; component={About} /&amp;gt;
+&amp;lt;Route path=&amp;quot;/hello&amp;quot; render={() =&amp;gt; &amp;lt;h1&amp;gt;Hello&amp;lt;/h1} /&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;exact&lt;/strong&gt; 用來作完全匹配，預設為 false，會匹配 &lt;code class=&quot;language-text&quot;&gt;/about&lt;/code&gt;、&lt;code class=&quot;language-text&quot;&gt;/about/a&lt;/code&gt;、&lt;code class=&quot;language-text&quot;&gt;/about/b&lt;/code&gt;，改為 true 的話便只會匹配&lt;code class=&quot;language-text&quot;&gt;/about&lt;/code&gt;
+&lt;strong&gt;path&lt;/strong&gt; 用來設定要匹配的路徑
+&lt;strong&gt;component&lt;/strong&gt; 用來設定匹配後要顯示的組件
+&lt;strong&gt;render&lt;/strong&gt; 用來設定匹配後要顯示的東西&lt;/p&gt;
+&lt;h4&gt;Link、NavLink&lt;/h4&gt;
+&lt;p&gt;控制路由跳轉&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;&amp;lt;link to=&amp;quot;/about&amp;quot;/&amp;gt;
+&amp;lt;link to=&amp;quot;/about?name=windy&amp;quot;/&amp;gt;
+&amp;lt;link to={{
+     pathname:&amp;#39;/about&amp;#39;,
+     search:&amp;#39;?name=angel&amp;#39;,
+     hash:&amp;#39;#women&amp;#39;,
+     state:{fromDashboard:true}
+}}/&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;Switch&lt;/h4&gt;
+&lt;p&gt;只渲染出第一個與當前訪問地址匹配的 Route 或 Redirect
+否則只要匹配的都會顯示&lt;/p&gt;
+&lt;h4&gt;Redirect&lt;/h4&gt;
+&lt;p&gt;重新導向&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;&amp;lt;Switch&amp;gt;
+  &amp;lt;Redirect from=&amp;#39;/users/:id&amp;#39; to=&amp;#39;/users/profile/:id&amp;#39;/&amp;gt;
+  &amp;lt;Route path=&amp;#39;/users/profile/:id&amp;#39; component={Profile}/&amp;gt;
+&amp;lt;/Switch&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;match&lt;/h4&gt;
+&lt;p&gt;match是在使用router之後被放入props中的一個屬性，在class創建的組件中我們需要通過this.props.match來獲取match之中的信息。match中包含的信息如下。
+&lt;img src=&quot;https://i.imgur.com/btstriI.png&quot;&gt;&lt;/p&gt;
+&lt;h3&gt;參考來源&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.ucamc.com/e-learning/javascript/278-%E7%B0%A1%E5%96%AE%E4%BB%8B%E7%B4%B9%E4%BA%86%E8%A7%A3react-router-4%E6%95%99%E5%AD%B8.html&quot;&gt;一探究竟了解React-router 4簡易教學&lt;/a&gt;
+&lt;a href=&quot;https://hk.saowen.com/a/73172216c8b96ab4f135316b229c9d578a81be535f5c7feb4b06cc032a99c1d3&quot;&gt;React 快速上手 - 07 前端路由 react-router&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Basics of babel]]></title><description><![CDATA[INSTALL 安裝 Babel 主程式以及 presets，如果沒有裝過 babel-cli 也需要安裝。 babel-preset-env: 包含最新的 es2015 ~ es2017 版 USAGE .babelrc Babel 的設定檔 package.json…]]></description><link>https://gatsby-starter-personal-blog.greglobinski.com/basic-babel/</link><guid isPermaLink="false">https://gatsby-starter-personal-blog.greglobinski.com/basic-babel/</guid><content:encoded>&lt;h2&gt;INSTALL&lt;/h2&gt;
+&lt;p&gt;安裝 Babel 主程式以及 presets，如果沒有裝過 babel-cli 也需要安裝。&lt;/p&gt;
+&lt;p&gt;babel-preset-env: 包含最新的 es2015 ~ es2017 版&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell=&quot;&gt;
+      &lt;pre class=&quot;language-shell=&quot;&gt;&lt;code class=&quot;language-shell=&quot;&gt;# babel-cli 安裝在全域
+npm install -g babel-cli
+
+npm install --save-dev babel-core babel-preset-env&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h2&gt;USAGE&lt;/h2&gt;
+&lt;h3&gt;.babelrc&lt;/h3&gt;
+&lt;p&gt;Babel 的設定檔&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;json=&quot;&gt;
+      &lt;pre class=&quot;language-json=&quot;&gt;&lt;code class=&quot;language-json=&quot;&gt;{
+  &amp;quot;presets&amp;quot;: [&amp;quot;env&amp;quot;]
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h3&gt;package.json&lt;/h3&gt;
+&lt;p&gt;一般的幾個用法:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;將 &lt;code class=&quot;language-text&quot;&gt;script.js&lt;/code&gt; 轉譯後輸出至目錄 dist 下的 &lt;code class=&quot;language-text&quot;&gt;script-compiled.js&lt;/code&gt;，也可用 &lt;code class=&quot;language-text&quot;&gt;-o&lt;/code&gt;來取代&lt;code class=&quot;language-text&quot;&gt;--out-file&lt;/code&gt;
+&lt;code class=&quot;language-text&quot;&gt;babel script.js --out-file dist/script-compiled.js&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;--watch&lt;/code&gt; 或是 &lt;code class=&quot;language-text&quot;&gt;-w&lt;/code&gt;，會監看檔案，有變動時重新編譯
+&lt;code class=&quot;language-text&quot;&gt;babel script.js --watch --out-file script-compiled.js&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;編譯整個 src 資料夾並且輸出至 lib 資料夾
+&lt;code class=&quot;language-text&quot;&gt;babel src --out-dir lib&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;複製文件或資料夾（不會進行編譯）
+&lt;code class=&quot;language-text&quot;&gt;babel src --out-dir lib --copy-files&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;json=&quot;&gt;
+      &lt;pre class=&quot;language-json=&quot;&gt;&lt;code class=&quot;language-json=&quot;&gt;&amp;quot;scripts&amp;quot;: {
+&amp;quot;build&amp;quot;: &amp;quot;babel src -d dist&amp;quot;
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Run file after compiled&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;npm run build &amp;amp;&amp;amp; npm start&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;</content:encoded></item><item><title><![CDATA[Junior to Senior Web Developer Roadmap (Part I)]]></title><description><![CDATA[SSH Create a connection Performance I Uglify JS, CSS… 透過刪除空白、最小化命名來壓縮檔案，來達到節省流量
+ 線上 Uglify 工具 Minimize Images 依照合適的用途來選擇檔案格式 :
+小動畫: GIF…]]></description><link>https://gatsby-starter-personal-blog.greglobinski.com/junior-to-senior-part1/</link><guid isPermaLink="false">https://gatsby-starter-personal-blog.greglobinski.com/junior-to-senior-part1/</guid><content:encoded>&lt;h2&gt;SSH&lt;/h2&gt;
+&lt;h3&gt;Create a connection&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;=shell&quot;&gt;
+      &lt;pre class=&quot;language-=shell&quot;&gt;&lt;code class=&quot;language-=shell&quot;&gt;# ssh user@host
+ssh ben.liao@192.168.1.125&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h2&gt;Performance I&lt;/h2&gt;
+&lt;h3&gt;Uglify JS, CSS…&lt;/h3&gt;
+&lt;p&gt;透過刪除空白、最小化命名來壓縮檔案，來達到節省流量
+&lt;a href=&quot;https://skalman.github.io/UglifyJS-online/&quot;&gt;線上 Uglify 工具&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Minimize Images&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;依照合適的用途來選擇檔案格式 :
+小動畫: GIF
+照片: JPEG
+透明背景: PNG
+ICON: SVG&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;按需加載 :
+小螢幕時載入小圖
+大螢幕時載入大圖&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;使用 CDN&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;移除圖片的 exif 資訊&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href=&quot;http://jpeg-optimizer.com/&quot;&gt;JPEG 線上壓縮工具&lt;/a&gt;
+&lt;a href=&quot;https://tinypng.com/&quot;&gt;PNG 線上壓縮工具&lt;/a&gt;
+&lt;a href=&quot;https://www.imgix.com/&quot;&gt;圖片 CDN 服務&lt;/a&gt;
+&lt;a href=&quot;https://www.verexif.com/en/&quot;&gt;VIEW EXIF&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Critical Render Path&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/wfDUQLl.png&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;盡可能最先載入 CSS，越快解析完，使用者的畫面越早呈現&lt;/li&gt;
+&lt;li&gt;盡可能在最後才載入 JS，因為會阻隔其他檔案的下載。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/LVE2m07.png&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;script 標籤提供 async、defer 兩種屬性，可以用來避免中斷瀏覽器解析&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/rJBnYej.png&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;DOMContentLoaded: 觸發點是在HTML、CSS 載入完成，瀏覽器解析完之前&lt;/li&gt;
+&lt;li&gt;Load: 觸發點是所有資源載入完畢、渲染完成之後&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Testing your page speed&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://developers.google.com/speed/pagespeed/insights/&quot;&gt;PageSpeed Insights&lt;/a&gt;
+&lt;a href=&quot;https://www.webpagetest.org/&quot;&gt;WebPageTest&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Performance II&lt;/h2&gt;
+&lt;h3&gt;Code-Splitting&lt;/h3&gt;
+&lt;p&gt;透過動態載入&lt;code class=&quot;language-text&quot;&gt;import()&lt;/code&gt; 僅載入當前頁面所需的 JS。&lt;/p&gt;
+&lt;p&gt;如果是使用 &lt;code class=&quot;language-text&quot;&gt;create-react-app&lt;/code&gt; 或 &lt;code class=&quot;language-text&quot;&gt;next.js&lt;/code&gt; ，則是已經設定好直接就可以使用 Code-Splitting 功能。&lt;/p&gt;
+&lt;p&gt;優點:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;減少初次載入時所需要下載的檔案大小，加快載入速度。&lt;/li&gt;
+&lt;li&gt;減少頻寬浪費。假設使用者永遠沒進入到某頁面，則該頁面所需的 JS 則不會載入。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;缺點:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;並不是一定會減少 &lt;code class=&quot;language-text&quot;&gt;bundle.js&lt;/code&gt; 的大小，因為對此 webpack 需要更多程式碼來處理這部分的規則，但理論上是會變小的。&lt;/li&gt;
+&lt;li&gt;雖然切分之後的檔案通常很小，載入速度會較快，但在切換頁面時還是會有輕微閃爍。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;綜合其優缺點，還是需要依照專案的需求來評估是否需要使用此功能，並不一定切割過後就會比較好。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://reactjs.org/docs/code-splitting.html&quot;&gt;React 官方文檔&lt;/a&gt;
+&lt;a href=&quot;https://github.com/jamiebuilds/react-loadable&quot;&gt;react-loadable(官方文檔上推薦的library)&lt;/a&gt;
+&lt;a href=&quot;https://github.com/aneagoie/code-splitting-exercise&quot;&gt;Code-Splitting(by HOC)&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;React Performance Optimizations&lt;/h3&gt;
+&lt;p&gt;所有父元件的 update 都會導致其子元件也 update。也就是說父元件的 props 或是 state 的改變都會造成子元件重新渲染，不管子元件是否真的需要重新渲染。&lt;/p&gt;
+&lt;p&gt;如何減少不必要的渲染以提升效能:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;利用 &lt;code class=&quot;language-text&quot;&gt;shouldComponentUpdate(nextProps, nextState)&lt;/code&gt; 來判斷該元件是否真的需要更新&lt;/li&gt;
+&lt;li&gt;利用 React 提供的 Pure Component&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;但以上的方法都是藉由額外的判斷來決定是否更新，過度的濫用也有可能造成效能的浪費；
+或是判斷沒寫好的話，有可能造成漏掉應該更新的時機，使用時須特別注意。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://juejin.im/entry/5934c9bc570c35005b556e1a&quot;&gt;Pure Component&lt;/a&gt;
+&lt;a href=&quot;https://github.com/maicki/why-did-you-update&quot;&gt;Why did you update&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Progressive Web App(PWA)&lt;/h3&gt;
+&lt;p&gt;由 &lt;a href=&quot;https://developers.google.com/web/fundamentals/codelabs/your-first-pwapp/&quot;&gt;Google&lt;/a&gt; 提供的解釋，什麼是 PWA:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;漸進增強 - 能夠讓每一位用戶使用，無論用戶使用什麽瀏覽器，因為它是始終以漸進增強為原則。&lt;/li&gt;
+&lt;li&gt;響應式用戶界面 - 適應任何環境：桌面電腦，智能手機，筆記本電腦，或者其他設備。&lt;/li&gt;
+&lt;li&gt;不依賴網絡連接 - 通過 service workers 可以在離線或者網速極差的環境下工作。&lt;/li&gt;
+&lt;li&gt;類原生應用 - 有像原生應用般的交互和導航給用戶原生應用般的體驗，因為它是建立在 app shell model 上的。&lt;/li&gt;
+&lt;li&gt;持續更新 - 受益於 service worker 的更新進程，應用能夠始終保持更新。&lt;/li&gt;
+&lt;li&gt;安全 - 通過 HTTPS 來提供服務來防止網絡窺探，保證內容不被篡改。&lt;/li&gt;
+&lt;li&gt;可發現 - 得益於 W3C manifests 元數據和 service worker 的登記，讓搜索引擎能夠找到 web 應用。&lt;/li&gt;
+&lt;li&gt;再次訪問 - 通過消息推送等特性讓用戶再次訪問變得容易。&lt;/li&gt;
+&lt;li&gt;可安裝 - 允許用戶保留對他們有用的應用在主屏幕上，不需要通過應用商店。&lt;/li&gt;
+&lt;li&gt;可連接性 - 通過 URL 可以輕松分享應用，不用復雜的安裝即可運行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;透過 &lt;a href=&quot;https://developers.google.com/web/progressive-web-apps/checklist&quot;&gt;Progressive Web App Checklist&lt;/a&gt; 了解要成為最基礎的 PWA 需要具備的條件。&lt;/p&gt;
+&lt;h4&gt;HTTPS&lt;/h4&gt;
+&lt;p&gt;安全性是PWA的基礎條件之一，而透過 HTTPS 可以讓我們獲得相對安全的環境。
+HTTPS 的主要思想就是，用戶相信憑證頒發機構所發出的憑證，因此用戶也相信取得此憑證的網站是合法且安全的。&lt;a href=&quot;https://zh.wikipedia.org/wiki/%E8%B6%85%E6%96%87%E6%9C%AC%E4%BC%A0%E8%BE%93%E5%AE%89%E5%85%A8%E5%8D%8F%E8%AE%AE&quot;&gt;[WIKI]&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;提供免費認證的服務
+&lt;a href=&quot;https://letsencrypt.org/&quot;&gt;Let’s Encrypt&lt;/a&gt;
+&lt;a href=&quot;https://www.cloudflare.com/zh-tw/lp/overview-a/&quot;&gt;cloudflare&lt;/a&gt;&lt;/p&gt;
+&lt;h4&gt;App Manifest&lt;/h4&gt;
+&lt;p&gt;如果是透過 &lt;code class=&quot;language-text&quot;&gt;create-react-app&lt;/code&gt; 來產生專案的話，會自動在 &lt;code class=&quot;language-text&quot;&gt;public/&lt;/code&gt; 產生一個 &lt;code class=&quot;language-text&quot;&gt;manifest.json&lt;/code&gt; 檔案。&lt;/p&gt;
+&lt;p&gt;manifest 設定檔能夠幫我們設定像是自訂名稱、自訂圖標、設定啟動畫面、顯示方向和加到主畫面等功能。&lt;/p&gt;
+&lt;p&gt;並且可以在 Chrome Dev Tool 下面的 Application tab 下面看到相關的資訊。
+&lt;img src=&quot;https://i.imgur.com/DotExiy.png&quot;&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;jsonld=&quot;&gt;
+      &lt;pre class=&quot;language-jsonld=&quot;&gt;&lt;code class=&quot;language-jsonld=&quot;&gt;// 透過 create-react-app 產生的最基本款
+{
+  &amp;quot;short_name&amp;quot;: &amp;quot;React App&amp;quot;,
+  &amp;quot;name&amp;quot;: &amp;quot;Create React App Sample&amp;quot;,
+  &amp;quot;icons&amp;quot;: [
+    {
+      &amp;quot;src&amp;quot;: &amp;quot;favicon.ico&amp;quot;,
+      &amp;quot;sizes&amp;quot;: &amp;quot;64x64 32x32 24x24 16x16&amp;quot;,
+      &amp;quot;type&amp;quot;: &amp;quot;image/x-icon&amp;quot;
+    }
+  ],
+  &amp;quot;start_url&amp;quot;: &amp;quot;./index.html&amp;quot;,
+  &amp;quot;display&amp;quot;: &amp;quot;standalone&amp;quot;,
+  &amp;quot;theme_color&amp;quot;: &amp;quot;#000000&amp;quot;,
+  &amp;quot;background_color&amp;quot;: &amp;quot;#ffffff&amp;quot;
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;&lt;a href=&quot;https://lavas.baidu.com/pwa/engage-retain-users/add-to-home-screen/introduction&quot;&gt;PWA 相關文檔&lt;/a&gt;
+&lt;a href=&quot;https://ithelp.ithome.com.tw/articles/10187529&quot;&gt;PWA 30天鐵人賽&lt;/a&gt;&lt;/p&gt;
+&lt;h4&gt;Service Worker&lt;/h4&gt;
+&lt;p&gt;Service Worker 提供了新的體驗，讓用戶可以在網路不佳甚至是斷線時，依舊可以擁有基礎的體驗(不至於像是一般的WEB斷線會有小恐龍出現)。&lt;/p&gt;
+&lt;p&gt;並且還可以做到像是更新或是推播這種原本應該是 APP 才能做到的功能。&lt;/p&gt;
+&lt;p&gt;一般來說，用戶在瀏覽網頁時都是向伺服器發出請求，再由伺服器回應資料(HTML、CSS、JS等等)。&lt;/p&gt;
+&lt;p&gt;而 SW(Service Worker 簡稱) 有點像是中間人的感覺，一旦你的應用程式註冊了 SW ，接下來發出的所有請求都會被其攔截，並拿去詢問 Cache API 。&lt;/p&gt;
+&lt;p&gt;如果已經有資料了，便直接回傳給用戶；若無則再向伺服器發起請求。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/xx1yE2z.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;在 Chrome Dev Tool 中一樣可以透過 Application 這個 tab 來查看。紅框部分則是 Cache 的部分，SW 會將需要快取的資料存放在此。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/XiCoD5q.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;如果是透過 &lt;code class=&quot;language-text&quot;&gt;create-react-app&lt;/code&gt; 那 SW 的部分則都設定完成了。如果需要自己設定可以參考&lt;a href=&quot;https://github.com/jeffposnick/create-react-pwa/compare/starting-point...pwa&quot;&gt;這裡&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Deploy React App on github pages&lt;/h3&gt;
+&lt;h4&gt;Install&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;npm install --save gh-pages&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;Usage&lt;/h4&gt;
+&lt;p&gt;在 &lt;code class=&quot;language-text&quot;&gt;package.json&lt;/code&gt; 中加入新的 &lt;code class=&quot;language-text&quot;&gt;scripts&lt;/code&gt;，並加入 &lt;code class=&quot;language-text&quot;&gt;homepage&lt;/code&gt; property。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;&amp;quot;homepage&amp;quot;: &amp;quot;https://fallins.github.io/notes&amp;quot;
+&amp;quot;scripts&amp;quot;: {
+    &amp;quot;predeploy&amp;quot;: &amp;quot;npm run build&amp;quot;
+    &amp;quot;deploy&amp;quot;: &amp;quot;gh-pages -d build&amp;quot;
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h2&gt;Testing&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Unit Tests&lt;/li&gt;
+&lt;li&gt;Integration Tests&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Automation Tests&lt;/p&gt;
+&lt;h3&gt;Refference&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://medium.com/@savemuse/react-%E5%89%8D%E7%AB%AF%E6%B8%AC%E8%A9%A6%E6%95%99%E5%AD%B8-2ccedbe79411&quot;&gt;React 前端單元測試教學&lt;/a&gt;
+&lt;a href=&quot;https://medium.com/@yurenju/%E8%87%AA%E5%8B%95%E8%BB%9F%E9%AB%94%E6%B8%AC%E8%A9%A6-tdd-%E8%88%87-bdd-464519672ac5&quot;&gt;自動軟體測試、TDD 與 BDD&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Basics of react and react-router (Part I)]]></title><description><![CDATA[Install install node install create-react-app using create-react-app to create a new project run   to start project Project Structure public…]]></description><link>https://gatsby-starter-personal-blog.greglobinski.com/react-note-part1/</link><guid isPermaLink="false">https://gatsby-starter-personal-blog.greglobinski.com/react-note-part1/</guid><content:encoded>&lt;h2&gt;Install&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;install node&lt;/li&gt;
+&lt;li&gt;install create-react-app&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;using create-react-app to create a new project&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell=&quot;&gt;
+      &lt;pre class=&quot;language-shell=&quot;&gt;&lt;code class=&quot;language-shell=&quot;&gt;create-react-app newProject&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/li&gt;
+&lt;li&gt;run &lt;code class=&quot;language-text&quot;&gt;npm start&lt;/code&gt; to start project&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Project Structure&lt;/h2&gt;
+&lt;h4&gt;public&lt;/h4&gt;
+&lt;p&gt;用來存放一些靜態設定檔或是HTML檔案
+manifest.json 則是用來設定 meta data 資訊&lt;/p&gt;
+&lt;h4&gt;src&lt;/h4&gt;
+&lt;p&gt;用來存放 react source&lt;/p&gt;
+&lt;h4&gt;build&lt;/h4&gt;
+&lt;p&gt;透過 &lt;code class=&quot;language-text&quot;&gt;npm run build&lt;/code&gt; 會建立 build 資料夾，並編譯出真正放在伺服器上的所有資料、程式&lt;/p&gt;
+&lt;h2&gt;JSX&lt;/h2&gt;
+&lt;p&gt;JSX 是一種語法糖，將 JS 中的 類HTML 結構編譯為 JS 程式，幫助開發者更直覺的開發並且開發較好維護的程式碼。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;import React, { Component } from &amp;#39;react&amp;#39;;
+class App extends Component {
+  render() {
+    return (
+      // JSX 寫法    
+      // &amp;lt;div className=&amp;quot;App&amp;quot;&amp;gt;
+      //   &amp;lt;h1&amp;gt;React App&amp;lt;/h1&amp;gt;
+      // &amp;lt;/div&amp;gt;
+
+      //this is how react really doing, compile jsx to js
+      //and this is why you haven&amp;#39;t used React but still need  import it
+      //不用 JSX 的寫法
+      React.createElement(&amp;#39;div&amp;#39;, {className: &amp;#39;App&amp;#39;}, React.createElement(&amp;#39;h1&amp;#39;, null, &amp;#39;React App&amp;#39;))
+    );
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h2&gt;CSS in React&lt;/h2&gt;
+&lt;p&gt;透過 import 外部的 CSS ，但此種用法必須搭配 webpack(css-loader)，而且此種方式加入的 CSS 會是全域的 CSS，如果有同名稱的選擇器會相互覆蓋&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;import &amp;#39;./Person.css&amp;#39;
+
+const Person = () =&amp;gt; {
+    return (
+        &amp;lt;div className=&amp;quot;Person&amp;quot;&amp;gt;
+            &amp;lt;p&amp;gt;Person Component&amp;lt;/p&amp;gt;
+        &amp;lt;/div&amp;gt;
+        
+    )
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;透過 inline 的方式，但缺點是不能寫 mediaQuery, pseudo 元素，但可透過一個套件 &lt;a href=&quot;https://github.com/FormidableLabs/radium&quot;&gt;radium&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;//透過一般的 inline 方式
+const Person = () =&amp;gt; {
+    return (
+        &amp;lt;p style={{color: &amp;quot;red&amp;quot;}}&amp;gt;Person Component&amp;lt;/p&amp;gt;
+    )
+}
+
+//inline 方式也可以透過變數來控制 css
+const Animal = () =&amp;gt; {
+    const style = {
+        color: &amp;quot;red&amp;quot;,
+        border: &amp;quot;1px solid #000&amp;quot;,
+        borderRadius: &amp;quot;3px&amp;quot;
+    }
+    return (
+        &amp;lt;p style={style}&amp;gt;Person Component&amp;lt;/p&amp;gt;
+    )
+}
+
+//透過 Radium 來使用CSS
+import Radium, { StyleRoot } from &amp;#39;radium&amp;#39;
+
+//如果要透過 Radium 加上 media query 則必須在父元素包上 StyleRoot，其他用法不用
+class App extends Component {
+  render() {    
+    return (
+      &amp;lt;StyleRoot&amp;gt;             
+          &amp;lt;h1&amp;gt;Hello&amp;lt;/h1&amp;gt;
+          &amp;lt;Comp /&amp;gt;
+      &amp;lt;/StyleRoot&amp;gt;
+    );
+  }
+}
+
+//可以使用正常的 CSS，也可以使用 Pseudo 元素
+const Person = () =&amp;gt; {
+  const style = {
+        &amp;#39;@media (min-width: 500px)&amp;#39;: {
+            width: &amp;#39;450px&amp;#39;,
+            color: &amp;#39;green&amp;#39;
+        },
+        color: &amp;#39;red&amp;#39;,
+        &amp;#39;:hover&amp;#39;: {
+          color: &amp;#39;pink&amp;#39;
+        }
+    }
+  return (    
+      &amp;lt;div style={style}&amp;gt;        
+          &amp;lt;p&amp;gt;Start editing to see some magic happen :)&amp;lt;/p&amp;gt;
+      &amp;lt;/div&amp;gt;    
+  )
+}
+
+//最後必須呼叫 Radium 並把 component 傳入
+const Comp = Radium(Person)&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;透過CSS Module&lt;/p&gt;
+&lt;h5&gt;啟用&lt;/h5&gt;
+&lt;p&gt;以 create-react-app 舉例，需要先在 webpack 中啟用。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;先執行 &lt;code class=&quot;language-text&quot;&gt;npm run eject&lt;/code&gt; &lt;/li&gt;
+&lt;li&gt;找到 config 資料夾下的 webpack.config.*(dev or prod)&lt;/li&gt;
+&lt;li&gt;找到 module 下面設定 css 的區塊（&lt;code class=&quot;language-text&quot;&gt;test: /\.css$/&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在 css-loader 的部分加入 options(modules、localIdentName)&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;{
+loader: require.resolve(&amp;#39;css-loader&amp;#39;),
+options: {
+    importLoaders: 1,
+    //啟用 modules 功能
+    modules: true,
+    //設定編譯過後的 css name 加上一些識別使其成為唯一值
+    localIdentName: &amp;#39;[name]__[local]__[hash:base64:5]&amp;#39;
+    
+    //下為 .prod 中的屬性，不要蓋掉
+    minimize: true,
+    sourceMap: shouldUseSourceMap,
+},
+},&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h5&gt;Usage&lt;/h5&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;css=&quot;&gt;
+      &lt;pre class=&quot;language-css=&quot;&gt;&lt;code class=&quot;language-css=&quot;&gt;.Person{
+    width: 60%;
+    margin: 16px auto;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 3px #ccc;
+    padding: 16px;
+    text-align: center;
+}
+
+.big{
+    font-size: 24px;
+}
+
+.red{
+    color: red;
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;import React from &amp;#39;react&amp;#39;
+//與引入外部 CSS 不同，啟用 CSS Module 後引入的會變成一個物件
+import styles from &amp;#39;./Person.css&amp;#39;
+
+const Person = () =&amp;gt; {
+    return (
+        &amp;lt;div className={styles.Person}&amp;gt;
+            &amp;lt;p className={styles.big}&amp;gt;Person Component&amp;lt;/p&amp;gt;
+            &amp;lt;p className={styles.red}&amp;gt;Person Component&amp;lt;/p&amp;gt;
+        &amp;lt;/div&amp;gt;
+        
+    )
+}
+
+export default Person&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h2&gt;Stateless and Stateful&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Stateful&lt;/th&gt;
+&lt;th&gt;Stateless&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;class Abc extends Component { … }&lt;/td&gt;
+&lt;td&gt;const Abc = (props) =&gt; { … }&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Access to State&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Lifecycle Hooks&lt;/td&gt;
+&lt;td&gt;X&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Access State and Props via “this”&lt;/td&gt;
+&lt;td&gt;Access Props via “this”&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;language-text&quot;&gt;this.state.value &amp;amp; this.props.value2&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code class=&quot;language-text&quot;&gt;props.value&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;Lifecycle Hooks&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;https://rangle.github.io/react-training/img/reactjs_component_lifecycle_functions.png&quot;&gt;
+不管在 Mounting 或是 Updating 階段且執行到 render hooks 時，如果有其他嵌套的子組件的話，會先執行子組件的 Lifecycle Hooks。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;&amp;lt;Father&amp;gt;
+    &amp;lt;Child /&amp;gt;
+&amp;lt;/Father&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;以上方例子來說，如果在各個 Hook 中下 log 的話會依照如下順序：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;running constructor in Father comp&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;running componentWillMount in Father comp&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;running render in Father comp&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;running constructor in Child comp&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;running componentWillMount in Child comp&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;running render in Child comp&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;running componentDidMount in Child comp&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;running componentDidMount in Father comp&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;How React Updates The DOM&lt;/h2&gt;
+&lt;p&gt;並不是執行了 render 方法後，就一定會更新。
+React 會透過比較 virtual DOM 來確認是否需要更新，需要才會真正的去操作 DOM，藉此來優化效能。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/kqLfoZz.png&quot;&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Module Bundler]]></title><description><![CDATA[Webpack Install Install in develop environment Setup  新增   script  設定 babel 相關的 config  設定 eslint 相關的 config entry: 提供程式的進入點給 webpack output…]]></description><link>https://gatsby-starter-personal-blog.greglobinski.com/module-bundler/</link><guid isPermaLink="false">https://gatsby-starter-personal-blog.greglobinski.com/module-bundler/</guid><content:encoded>&lt;h1&gt;&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/tPPsDbS.png&quot;&gt;&lt;/p&gt;
+&lt;h2&gt;Webpack&lt;/h2&gt;
+&lt;h3&gt;Install&lt;/h3&gt;
+&lt;p&gt;Install in develop environment&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;npm install --save-dev webpack webpack-dev-server webpack-cli
+
+// 安裝 babel 相關的 module
+// babel-core: Babel 的主要程式
+// babel-loader: 讓 webpack 能夠使用 Babel
+// babel-preset-env: 將 ES6+ 的語法轉譯為 ES5
+// babel-preset-react: 編譯 JSX
+npm install --save-dev babel-core babel-loader babel-preset-env babel-preset-react
+
+// 安裝 eslint 相關的 module
+// eslint: 主程式
+// eslint-loader: 讓 webpack 使用 eslint
+// babel-eslint: 讓 eslint 能夠提示其尚不支援的語法錯誤
+npm install --save-dev eslint eslint-loader babel-eslint
+
+// 使用 eslint-config-airbnb 的規則需要安裝以下 modules
+npm install --save-dev eslint-config-airbnb eslint-plugin-import eslint-plugin-jsx-a11y eslint-plugin-react&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h3&gt;Setup&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;package.json&lt;/code&gt; 新增 &lt;code class=&quot;language-text&quot;&gt;start&lt;/code&gt; script&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;  &amp;quot;scripts&amp;quot;: {
+    &amp;quot;start&amp;quot;: &amp;quot;webpack-dev-server --config ./webpack.config.js --mode development&amp;quot;
+  }&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;.babelrc&lt;/code&gt; 設定 babel 相關的 config&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;json=&quot;&gt;
+      &lt;pre class=&quot;language-json=&quot;&gt;&lt;code class=&quot;language-json=&quot;&gt;{
+    &amp;quot;presets&amp;quot;: [
+        &amp;quot;env&amp;quot;,
+        &amp;quot;react&amp;quot;
+    ]
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;.eslintrc&lt;/code&gt; 設定 eslint 相關的 config&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;json=&quot;&gt;
+      &lt;pre class=&quot;language-json=&quot;&gt;&lt;code class=&quot;language-json=&quot;&gt;{
+    &amp;quot;parser&amp;quot;: &amp;quot;babel-eslint&amp;quot;,
+    &amp;quot;rules&amp;quot;: {
+        // 如果程式中有 console 則會提示 warning
+        &amp;quot;no-console&amp;quot;: &amp;quot;warn&amp;quot;
+    },
+    // 使用 eslint-config-airbnb 的規則需要增加下面 extends 設定
+    &amp;quot;extends&amp;quot;: [        
+        &amp;quot;airbnb&amp;quot;
+    ]
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;webpack.config.js&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;entry: 提供程式的進入點給 webpack&lt;/li&gt;
+&lt;li&gt;output: bundle 後檔案存放位置及檔名&lt;/li&gt;
+&lt;li&gt;module: 當中的 rules 用來設定多個規則，供 webpack 比對檔名(透過test屬性)，並使用正確的loader&lt;/li&gt;
+&lt;li&gt;resolve: import 檔案時，如果副檔名是 resolve 中設定的則可以省略&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;devServer: 設定要給 server 提供服務的路徑&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;module.exports = {    
+entry: [
+    &amp;#39;./src/index.js&amp;#39;
+],
+output: {
+    path: __dirname + &amp;#39;/dist&amp;#39;,
+    publicPath: &amp;#39;/&amp;#39;,
+    filename: &amp;#39;bundle.js&amp;#39;
+},    
+module: {
+    rules: [
+        {
+            test: /\.(js|jsx)/,
+            exclude: /node_modules/,
+            use: [&amp;#39;babel-loader&amp;#39;]
+        },
+        {
+            test: /\.(js|jsx)/,
+            exclude: /node_modules/,
+            use: [&amp;#39;eslint-loader&amp;#39;]
+        }
+    ]
+},
+resolve: {
+    extensions: [&amp;#39;.js&amp;#39;, &amp;#39;.jsx&amp;#39;]
+},
+devServer: {
+    contentBase: &amp;#39;./dist&amp;#39;
+}
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;a href=&quot;https://webpack.jakoblind.no/&quot;&gt;online webpack confing creator&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Parcel&lt;/h2&gt;
+&lt;h3&gt;Install&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;npm install --save-dev parcel-bundler babel-preset-env babel-preset-react&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h3&gt;Setup&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;有使用到 Babel 一樣要設置 &lt;code class=&quot;language-text&quot;&gt;.babelrc&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在&lt;code class=&quot;language-text&quot;&gt;package.json&lt;/code&gt;中設定 &lt;code class=&quot;language-text&quot;&gt;start&lt;/code&gt; script&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;&amp;quot;scripts&amp;quot;: {
+&amp;quot;start&amp;quot;: &amp;quot;parcel index.html&amp;quot;
+},&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Usage&lt;/h3&gt;
+&lt;p&gt;執行 &lt;code class=&quot;language-text&quot;&gt;npm start&lt;/code&gt; ，Parcel 會從 &lt;code class=&quot;language-text&quot;&gt;index.html&lt;/code&gt; 為進入點開始解析，任何有用到的JS、CSS、IMAGE等等都會打包完成&lt;/p&gt;
+&lt;h3&gt;Refference&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://parceljs.org/&quot;&gt;官網&lt;/a&gt;
+&lt;a href=&quot;http://www.css88.com/doc/parcel/getting_started.html&quot;&gt;中文文檔&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Junior to Senior Web Developer Roadmap (Part III)]]></title><description><![CDATA[JWT (Json Web Token) Traditional Cookie-Based Auth 需要在 Server 端(DB)，儲存使用者的 Session，藉以達成帶有狀態的請求。
+ Token-Based Auth 不需要儲存使用者 Session…]]></description><link>https://gatsby-starter-personal-blog.greglobinski.com/junior-to-senior-part3/</link><guid isPermaLink="false">https://gatsby-starter-personal-blog.greglobinski.com/junior-to-senior-part3/</guid><content:encoded>&lt;h2&gt;&lt;a href=&quot;https://jwt.io/&quot;&gt;JWT (Json Web Token)&lt;/a&gt;&lt;/h2&gt;
+&lt;h3&gt;Traditional Cookie-Based Auth&lt;/h3&gt;
+&lt;p&gt;需要在 Server 端(DB)，儲存使用者的 Session，藉以達成帶有狀態的請求。
+&lt;img src=&quot;https://i.imgur.com/akxyHjm.png&quot;&gt;&lt;/p&gt;
+&lt;h3&gt;Token-Based Auth&lt;/h3&gt;
+&lt;p&gt;不需要儲存使用者 Session，需要的資訊可以從 Token 中解析出來。
+&lt;img src=&quot;https://i.imgur.com/lMLnI3n.png&quot;&gt;&lt;/p&gt;
+&lt;h3&gt;Reference&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://medium.com/origino/%E7%B0%A1%E6%BD%94%E5%AE%89%E5%85%A8%E7%9A%84%E8%B3%87%E6%96%99%E5%82%B3%E8%BC%B8%E6%96%B9%E5%BC%8F-json-web-token-jwt-a87093cc14d4&quot;&gt;簡潔安全的資料傳輸方式&lt;/a&gt;
+&lt;a href=&quot;https://www.guonanjun.com/220.html&quot;&gt;JWT介紹和優缺點及適用場景分析&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Docker&lt;/h2&gt;
+&lt;h3&gt;Install&lt;/h3&gt;
+&lt;p&gt;透過官網下載符合系統的安裝檔，一步一步完成安裝即可。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://store.docker.com/editions/community/docker-ce-desktop-windows&quot;&gt;Docker&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;&lt;a href=&quot;https://redis.io/download&quot;&gt;Redis&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;Redis 是一個儲存在記憶體中(memory)的鍵值(key-value)資料庫。&lt;/p&gt;
+&lt;h3&gt;Install&lt;/h3&gt;
+&lt;p&gt;透過官網下載安裝檔進行安裝&lt;/p&gt;
+&lt;h3&gt;Usage&lt;/h3&gt;
+&lt;p&gt;透過命令行執行 &lt;code class=&quot;language-text&quot;&gt;redis-cli&lt;/code&gt;
+&lt;img src=&quot;https://i.imgur.com/fprWjAH.png&quot;&gt;&lt;/p&gt;
+&lt;h3&gt;Data Types&lt;/h3&gt;
+&lt;h4&gt;Hash&lt;/h4&gt;
+&lt;p&gt;可以想像成 JS 中的物件&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell=&quot;&gt;
+      &lt;pre class=&quot;language-shell=&quot;&gt;&lt;code class=&quot;language-shell=&quot;&gt;HMSET user id 45 name &amp;quot;Jessie&amp;quot;
+# 大概是像這樣
+# const user = {
+#     id: 45,
+#     name: &amp;quot;Jessie&amp;quot;
+# }
+
+HGET user id
+# &amp;quot;45&amp;quot;
+HGET user name
+# &amp;quot;Jessie&amp;quot;
+
+HGETALL user
+# &amp;quot;id&amp;quot;
+# &amp;quot;45&amp;quot;
+# &amp;quot;name&amp;quot;
+# &amp;quot;Jessie&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;List&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell=&quot;&gt;
+      &lt;pre class=&quot;language-shell=&quot;&gt;&lt;code class=&quot;language-shell=&quot;&gt;lpush list &amp;quot;item1&amp;quot;
+
+# 取得 List 所有資料
+lrange list 0 -1
+# &amp;quot;item1&amp;quot;
+
+# 從 List 最左邊加入一個 item
+lpush list &amp;quot;item2&amp;quot;
+# &amp;quot;item2&amp;quot;
+# &amp;quot;item1&amp;quot;
+
+# 從 List 最右邊加入一個 item
+rpush list &amp;quot;item3&amp;quot;
+# &amp;quot;item2&amp;quot;
+# &amp;quot;item1&amp;quot;
+# &amp;quot;item3&amp;quot;
+
+# 同理，移除的話可以用 LPOP、RPOP&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;SET、Sorted SET&lt;/h4&gt;
+&lt;h5&gt;SET&lt;/h5&gt;
+&lt;p&gt;是無序且唯一的。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell=&quot;&gt;
+      &lt;pre class=&quot;language-shell=&quot;&gt;&lt;code class=&quot;language-shell=&quot;&gt;# 加入 KEY 為 set 的 SET
+SADD set 1 2 3 4 5
+
+# 取得 set 的值
+SMEMBERS set
+# &amp;quot;1&amp;quot;
+# &amp;quot;2&amp;quot;
+# &amp;quot;3&amp;quot;
+# &amp;quot;4&amp;quot;
+# &amp;quot;5&amp;quot;
+
+# 在加入一個 hello 進入 set
+SADD set &amp;quot;hello&amp;quot;
+
+# 可以看出 set 是無序的
+SMEMBERS set
+# &amp;quot;hello&amp;quot;
+# &amp;quot;4&amp;quot;
+# &amp;quot;3&amp;quot;
+# &amp;quot;5&amp;quot;
+# &amp;quot;1&amp;quot;
+# &amp;quot;2&amp;quot;
+ 
+# 確認是否為 set 中的值
+SISMEMBER set &amp;quot;hello&amp;quot;
+# &amp;quot;1&amp;quot; =&amp;gt; 代表有
+# &amp;quot;0&amp;quot; =&amp;gt; 代表沒有&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h5&gt;Sorted Sets&lt;/h5&gt;
+&lt;p&gt;有序，但一樣是唯一的。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell=&quot;&gt;
+      &lt;pre class=&quot;language-shell=&quot;&gt;&lt;code class=&quot;language-shell=&quot;&gt;# 加入 KEY 為 sortedset 的 Sorted SET
+ZADD sortedset 50 &amp;quot;item1&amp;quot;
+ZADD sortedset 40 &amp;quot;item2&amp;quot;
+
+# 取得 sortedset 的值
+ZRANGE sortedset 0 -1
+# 會根據加入時給的分數由小到大排列
+# &amp;quot;item2&amp;quot;
+# &amp;quot;item1&amp;quot;
+
+# 在加入一個 hello 進入 set
+ZADD sortedset 10 &amp;quot;item3&amp;quot;
+# &amp;quot;item3&amp;quot;
+# &amp;quot;item2&amp;quot;
+# &amp;quot;item1&amp;quot;
+
+ZRANK sortedset &amp;quot;item2&amp;quot;
+# &amp;quot;1&amp;quot; =&amp;gt; 代表其排定的 Index&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h3&gt;Reference&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://redis.io/topics/quickstart&quot;&gt;Quick Start&lt;/a&gt;
+&lt;a href=&quot;https://blog.techbridge.cc/2016/06/18/redis-introduction/&quot;&gt;資料庫的好夥伴：Redis&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;AWS&lt;/h2&gt;
+&lt;h3&gt;Lambda&lt;/h3&gt;
+&lt;h3&gt;IAM&lt;/h3&gt;
+&lt;p&gt;由 AWS 提供的一個權限控管服務，透過此服務來控管對 AWS 上其他資源的訪問。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/introduction.html&quot;&gt;官方DOC&lt;/a&gt;
+&lt;a href=&quot;https://serverless.com/framework/docs/providers/aws/guide/iam/&quot;&gt;serverless DOC&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Serverless&lt;/h3&gt;
+&lt;h4&gt;Install&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;npm install -g serverless&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;Usage&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;// type sls as alias
+
+// this cmd can show all commands that can use
+serverless
+
+// 會在當前目錄創建一個模板(aws-nodejs)
+sls create -t aws-nodejs
+
+// 利用 IAM 增加一個使用者，並使用其權限進行操作，僅需設定一次
+sls config credentials --provider aws --key AKIAIMM3C43GP5LBTUFA --secret 9odr/t5NB9GL5HBpK5 x1gLuj+o/jDO8tJSjWjQcP
+
+// 透過 serverless 部署至 lambda
+sls deploy
+
+// 測試部署是否成功
+// 加上 local 僅會在本地端測試 並不會計量
+sls invoke local --function test
+// 沒加上 local 的話就會被AWS計量
+sls invoke --function test&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/XjOX0fB.png&quot;&gt;
+YML Config&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/sKorLgh.png&quot;&gt;
+Handler&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/F5v10fX.png&quot;&gt;
+Deploying&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/SZAkZP9.png&quot;&gt;
+INVOKE&lt;/p&gt;
+&lt;h2&gt;CI/CD&lt;/h2&gt;
+&lt;h3&gt;CI (Continuous Integration)&lt;/h3&gt;
+&lt;h3&gt;CD (Continuous Delivery &amp;#x26; Continuous Deployment)&lt;/h3&gt;</content:encoded></item><item><title><![CDATA[Junior to Senior Web Developer Roadmap (Part II)]]></title><description><![CDATA[SSR (Server Side Rendering) SSR VS CSR CSR 需要在第一次時將所有需要用到的資源全部下載完後，使用者才能看到第一屏的畫面。
+優點是後續的操作將會非常快，缺點則是初次訪問時必須下載較大量的資源。
+ SSR 則是取得HTML…]]></description><link>https://gatsby-starter-personal-blog.greglobinski.com/junior-to-senior-part2/</link><guid isPermaLink="false">https://gatsby-starter-personal-blog.greglobinski.com/junior-to-senior-part2/</guid><content:encoded>&lt;h2&gt;SSR (Server Side Rendering)&lt;/h2&gt;
+&lt;h3&gt;SSR VS CSR&lt;/h3&gt;
+&lt;p&gt;CSR 需要在第一次時將所有需要用到的資源全部下載完後，使用者才能看到第一屏的畫面。
+優點是後續的操作將會非常快，缺點則是初次訪問時必須下載較大量的資源。
+&lt;img src=&quot;https://i.imgur.com/3dC2Nkj.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;SSR 則是取得HTML檔案後，透過解析的過程在去下載需要的 JS、CSS 檔案，使用者能先看到畫面。
+但如果需要有完整的互動功能，與 CSR 一樣要等全部檔案下載解析完成後才能操作。
+&lt;img src=&quot;https://i.imgur.com/hRn3weS.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;所以兩著之間最大的差別就是在於使用者看到首屏的時間。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://medium.com/@wilbo/server-side-vs-client-side-routing-71d710e9227f&quot;&gt;Server-side vs Client-side Routing&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h3&gt;Gatsby&lt;/h3&gt;
+&lt;h3&gt;Next&lt;/h3&gt;
+&lt;h4&gt;Install&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;npm install --save next react react-dom&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;Setup&lt;/h4&gt;
+&lt;p&gt;在跟目錄建立一個 &lt;code class=&quot;language-text&quot;&gt;pages&lt;/code&gt; 資料，並執行 start script。
+&lt;code class=&quot;language-text&quot;&gt;packages.json&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;&amp;quot;scripts&amp;quot;: {
+    &amp;quot;start&amp;quot;: &amp;quot;next&amp;quot;
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;Usage&lt;/h4&gt;
+&lt;p&gt;在 &lt;code class=&quot;language-text&quot;&gt;pages&lt;/code&gt; 資料夾中新增兩個檔案，&lt;code class=&quot;language-text&quot;&gt;index.js&lt;/code&gt;、&lt;code class=&quot;language-text&quot;&gt;about.js&lt;/code&gt;。
+Next 會使用資料夾中的檔案名來做 route，也就是說在新增了兩個檔案之後，我們可以直接訪問 &lt;code class=&quot;language-text&quot;&gt;/index&lt;/code&gt;、&lt;code class=&quot;language-text&quot;&gt;/about&lt;/code&gt; 這兩個頁面。&lt;/p&gt;
+&lt;p&gt;另外，Next 還提供了 Link 來提供給 Client 做頁面的切換，透過 Link 只會下載所需的檔案並不會重新向伺服器發起完整的請求。
+如果是透過 a 標籤來做導向，則會發起完整的請求。&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;index.js&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;import Link from &amp;#39;next/link&amp;#39;
+
+const Index = () =&amp;gt; (
+    &amp;lt;div&amp;gt;
+        &amp;lt;h1&amp;gt;this is index page.&amp;lt;/h1&amp;gt;
+        &amp;lt;Link href=&amp;#39;/about&amp;#39;&amp;gt;
+            &amp;lt;button&amp;gt;About&amp;lt;/button&amp;gt;
+        &amp;lt;/Link&amp;gt;
+        
+        
+        //&amp;lt;a href=&amp;#39;/about&amp;#39;&amp;gt;About&amp;lt;/a&amp;gt;   
+        
+    &amp;lt;/div&amp;gt;
+)
+
+export default Index&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;about.js&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;import Link from &amp;#39;next/link&amp;#39;
+
+const About = () =&amp;gt; (
+    &amp;lt;div&amp;gt;
+        &amp;lt;h1&amp;gt;this is about page.&amp;lt;/h1&amp;gt;
+        &amp;lt;Link href=&amp;#39;/index&amp;#39;&amp;gt;
+            &amp;lt;button&amp;gt;Back&amp;lt;/button&amp;gt;
+        &amp;lt;/Link&amp;gt;
+    &amp;lt;/div&amp;gt;
+)
+
+export default About&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;Refference&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;another choice for SEO&lt;/strong&gt;
+&lt;a href=&quot;https://prerender.io/&quot;&gt;prerender.io&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Security&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/ilf9rzs.png&quot;&gt;&lt;/p&gt;
+&lt;h3&gt;SQL Injection&lt;/h3&gt;
+&lt;h3&gt;3rd Party Libraries&lt;/h3&gt;
+&lt;h4&gt;nsp (Node Security Platform)&lt;/h4&gt;
+&lt;p&gt;已於 2018/04 被 NPM &lt;a href=&quot;https://medium.com/npm-inc/npm-acquires-lift-security-258e257ef639&quot;&gt;收購&lt;/a&gt;，會繼續提供服務直到 2018/09 ，之後安全性檢查的功能將由 NPM 提供(NPM@6 之後)，&lt;a href=&quot;https://blog.npmjs.org/post/175511531085/the-node-security-platform-service-is-shutting&quot;&gt;透過 &lt;code class=&quot;language-text&quot;&gt;npm audit&lt;/code&gt; 取代原本nsp的檢查&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/nodesecurity/nsp&quot;&gt;nsp&lt;/a&gt; 會幫忙檢查所有使用到的套件是否有安全性的問題&lt;/p&gt;
+&lt;h5&gt;Install &amp;#x26; Usage&lt;/h5&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;// Install
+npm install nsp -g
+
+// Usage
+nsp check&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;檢查出有漏洞的套件，及其版本、路徑等等資訊。
+&lt;img src=&quot;https://i.imgur.com/FMsaqV9.png&quot;&gt;&lt;/p&gt;
+&lt;h4&gt;&lt;a href=&quot;https://github.com/snyk/snyk&quot;&gt;snyk&lt;/a&gt;&lt;/h4&gt;
+&lt;p&gt;另一個可以檢查所有相依套件的漏洞的套件，但是與 nsp 一樣的共同問題就是套件之間的相依是層層嵌套的。
+假設A套件底下的B套件在某個版本有安全性漏洞。雖然在下個版本修復了，但是A套件並沒有相對的更新，導致B套件更新之後A套件也不能用了，於是就只能等待A套件的更新，或是不使用A套件，目前沒有好的解法只能從中取捨。&lt;/p&gt;
+&lt;h3&gt;Logging&lt;/h3&gt;
+&lt;h4&gt;&lt;a href=&quot;https://github.com/expressjs/morgan&quot;&gt;morgan&lt;/a&gt;&lt;/h4&gt;
+&lt;p&gt;使用簡單，幫助紀錄HTTP Request 的 LOG。&lt;/p&gt;
+&lt;h4&gt;&lt;a href=&quot;https://github.com/winstonjs/winston/tree/2.x&quot;&gt;winston&lt;/a&gt;&lt;/h4&gt;
+&lt;p&gt;全方位 Logger 工具(? ，可以客製化logger。&lt;/p&gt;
+&lt;h3&gt;HTTPS Everywhere&lt;/h3&gt;
+&lt;p&gt;如上面提到的，透過 Https 來保護機敏性資料的傳送。&lt;/p&gt;
+&lt;h3&gt;XSS (Javascript Injection)&lt;/h3&gt;
+&lt;p&gt;XSS 透過與使用者的互動來達到攻擊目的。最常見的就是留言版的頁面，如果攻擊者透過留言板輸入惡意的代碼，網站又沒有做好防護(例如: 未過濾使用者的輸入、輸出時候也沒有過濾HTML Tag等等)，就會導致其他使用者在進到此頁面時被攻擊竊取資訊。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.qa-knowhow.com/?p=2992&quot;&gt;XSS攻擊的深入探討與防護之道&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;CSRF (Cross-Site Request Forgery)&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://blog.techbridge.cc/2017/02/25/csrf-introduction/&quot;&gt;讓我們來談談 CSRF&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Secure Headers&lt;/h3&gt;
+&lt;h4&gt;&lt;a href=&quot;https://github.com/helmetjs/helmet&quot;&gt;Helmet&lt;/a&gt;&lt;/h4&gt;
+&lt;p&gt;Helmet 會適當設定 HTTP 標頭，提高安全性以及防範一些已知的漏洞。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/kE5ASpB.png&quot;&gt;
+如上圖所示，在沒有戴上頭盔之前，Header 中會有 x-powered-by: Express，如此就有可能被有心人士方便的尋找漏洞並進行惡意行為。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/GRyY9Xe.png&quot;&gt;
+戴上頭盔以後，x-powered-by: Express 沒有了，多了其他能夠幫助提升安全性(應該? 的 Header 屬性。&lt;/p&gt;
+&lt;h5&gt;Reference&lt;/h5&gt;
+&lt;p&gt;&lt;a href=&quot;http://expressjs.com/zh-tw/advanced/best-practice-security.html&quot;&gt;express 中文文檔&lt;/a&gt;
+&lt;a href=&quot;https://juejin.im/post/5a24fd8f51882509e5438247&quot;&gt;為你的網站帶上帽子— 使用helmet 保護Express 應用&lt;/a&gt;
+&lt;a href=&quot;https://www.tutorialspoint.com/http/http_header_fields.htm&quot;&gt;HTTP - Header Fields&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Access Control&lt;/h3&gt;
+&lt;p&gt;控制使用者能夠存取的內容，給予適當的權限予以適當的使用者。
+像是必須要登入才能使用某些特定功能，或是要特定的 domain 才能存取 api。&lt;/p&gt;
+&lt;h3&gt;Data Management&lt;/h3&gt;
+&lt;p&gt;透過替資料庫(部分欄位)加密，以及登入或註冊時密碼的加密，來保護使用者的隱私。&lt;/p&gt;
+&lt;h4&gt;Refernece&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;https://blog.rangle.io/how-to-store-user-passwords-and-overcome-security-threats-in-2017/&quot;&gt;How to Store User Passwords and Overcome Security Threats in 2017&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Reference&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://ithelp.ithome.com.tw/articles/10186125&quot;&gt;2017鐵人賽資安系列&lt;/a&gt;
+&lt;a href=&quot;https://www.hacksplaining.com/lessons&quot;&gt;hacksplaining(A place to demonstrate how hacker acttack your system)&lt;/a&gt;
+&lt;a href=&quot;https://watchyourhack.com/&quot;&gt;Watch Your Hack&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Performance III&lt;/h2&gt;
+&lt;h3&gt;CDN&lt;/h3&gt;
+&lt;p&gt;Content Delivery Network 或 Content Distribution Network 簡稱 CDN。
+透過使用 CDN 服務，可以就近向最近的伺服器請求資料加快存取速度，並針對其做 Caching 加快第一次以後存取的速度。還可以防護像是 DDos 之類的惡意攻擊。
+&lt;a href=&quot;https://www.cloudflare.com/zh-tw/&quot;&gt;Cloudflare&lt;/a&gt;、&lt;a href=&quot;https://azure.microsoft.com/zh-tw/services/cdn/&quot;&gt;Azure CDN&lt;/a&gt;、&lt;a href=&quot;https://aws.amazon.com/tw/cloudfront/?sc_channel=PS&amp;#x26;sc_campaign=acquisition_TW&amp;#x26;sc_publisher=google&amp;#x26;sc_medium=cloudfront_b&amp;#x26;sc_content=cloudfront_e&amp;#x26;sc_detail=amazon%20cloudfront&amp;#x26;sc_category=cloudfront&amp;#x26;sc_segment=165240657802&amp;#x26;sc_matchtype=e&amp;#x26;sc_country=TW&amp;#x26;s_kwcid=AL!4422!3!165240657802!e!!g!!amazon%20cloudfront&amp;#x26;ef_id=Wr9hAwAAAEjDEDyy:20180821091504:s&quot;&gt;AWS CloudFront&lt;/a&gt; 是目前比較有名的幾個 CDN 服務供應商。&lt;/p&gt;
+&lt;h4&gt;Reference&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;https://zh.wikipedia.org/wiki/%E5%85%A7%E5%AE%B9%E5%82%B3%E9%81%9E%E7%B6%B2%E8%B7%AF&quot;&gt;wiki&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;GZIP&lt;/h3&gt;
+&lt;p&gt;GZIP是一種壓縮的技術，一般來說使用者如果向有使用 GZIP 技術的網站發起請求，伺服器端會先將文件(HTML、CSS etc.)壓縮，而壓縮過後大概會是原始文件的 30%-40% 的大小而已，大幅度的減少需要傳輸的內容，藉以提高速度並減少流量的消耗。
+在 Production 下，實作壓縮最好的地方是在反向代理伺服器。&lt;/p&gt;
+&lt;h4&gt;Usage&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;// work with GZIP
+var compression = require(&amp;#39;compression&amp;#39;)
+var express = require(&amp;#39;express&amp;#39;)
+
+var app = express()
+app.use(compression())&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/Wz3MAii.png&quot;&gt;&lt;/p&gt;
+&lt;h4&gt;&lt;a href=&quot;https://github.com/google/brotli&quot;&gt;Brotli&lt;/a&gt;&lt;/h4&gt;
+&lt;p&gt;由 GOOGLE 提出的新的壓縮技術，壓縮比高於 GZIP。&lt;/p&gt;
+&lt;p&gt;對於現代瀏覽器的支援度
+&lt;img src=&quot;https://i.imgur.com/srhakkU.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/1F6vWf9.png&quot;&gt;&lt;/p&gt;
+&lt;h4&gt;Reference&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/gscaiyucheng/article/details/28282533&quot;&gt;淺談網頁壓縮GZIP&lt;/a&gt;
+&lt;a href=&quot;http://expressjs.com/zh-tw/advanced/best-practice-performance.html&quot;&gt;Express DOC&lt;/a&gt;
+&lt;a href=&quot;https://zh.wikipedia.org/wiki/Brotli&quot;&gt;Brotli Wiki&lt;/a&gt;
+&lt;a href=&quot;https://medium.com/@samparkinson_/brotli-compression-34e436efca0&quot;&gt;Brotli Compression&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Caching&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://blog.techbridge.cc/2017/06/17/cache-introduction/&quot;&gt;循序漸進理解HTTP Cache 機制&lt;/a&gt;&lt;/p&gt;</content:encoded></item></channel></rss>
