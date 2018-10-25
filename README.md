@@ -19,6 +19,12 @@ A [GatsbyJS](https://www.gatsbyjs.org/) personal blog starter. <br /><br />
 
 See the starter in action » [demo website](https://gatsby-starter-personal-blog.greglobinski.com/) <br />For more information visit » [dev.greglobinski.com/gatsby-starter-personal-blog](https://dev.greglobinski.com/gatsby-starter-personal-blog/)
 
+## Publish to Github pages
+Run the `deploy` script. It will automatically rebuild project and move public folder to origin master branch to complete publish.
+```
+npm run deploy
+```
+
 ## Description
 
 A ready to use, easy to customize [GatsbyJS](https://github.com/gatsbyjs/gatsby) personal blog starter with 'like app' layout transitions.
