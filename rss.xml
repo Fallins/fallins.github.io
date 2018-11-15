@@ -1,146 +1,215 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[PersonalBlog - a blog starter for GatsbyJS]]></title><description><![CDATA[PersonalBlog is a GatsbyJS starter.]]></description><link>https://gatsby-starter-personal-blog.greglobinski.com</link><generator>RSS for Node</generator><lastBuildDate>Wed, 24 Oct 2018 07:48:30 GMT</lastBuildDate><item><title><![CDATA[Basics of react and react-router (Part II)]]></title><description><![CDATA[Fragments React 16.2 Feature
-可以不用額外包一層div HOC(High Order Component) 本質上只是一個函數，可以回傳 JSX、Stateless and Stateful component
-透過 HOC…]]></description><link>https://gatsby-starter-personal-blog.greglobinski.com/react-note-part2/</link><guid isPermaLink="false">https://gatsby-starter-personal-blog.greglobinski.com/react-note-part2/</guid><content:encoded>&lt;h2&gt;Fragments&lt;/h2&gt;
-&lt;p&gt;React 16.2 Feature
-可以不用額外包一層div&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
-      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;// 原來的寫法
-&amp;lt;div&amp;gt;        
-  &amp;lt;p&amp;gt;First&amp;lt;/p&amp;gt;
-  &amp;lt;p&amp;gt;Second&amp;lt;/p&amp;gt;
-  &amp;lt;p&amp;gt;Thired&amp;lt;/p&amp;gt;
-&amp;lt;/div&amp;gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[PersonalBlog - a blog starter for GatsbyJS]]></title><description><![CDATA[PersonalBlog is a GatsbyJS starter.]]></description><link>https://gatsby-starter-personal-blog.greglobinski.com</link><generator>RSS for Node</generator><lastBuildDate>Thu, 15 Nov 2018 02:03:09 GMT</lastBuildDate><item><title><![CDATA[Create React App without create-react-app]]></title><description><![CDATA[Install Make a directory for project Do  Do  Install dependencies webpack npm install —save-dev webpack webpack-cli webpack-dev-server babel…]]></description><link>https://gatsby-starter-personal-blog.greglobinski.com/Create-React-App-without-create-react-app/</link><guid isPermaLink="false">https://gatsby-starter-personal-blog.greglobinski.com/Create-React-App-without-create-react-app/</guid><content:encoded>&lt;h2&gt;Install&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Make a directory for project&lt;/li&gt;
+&lt;li&gt;Do &lt;code class=&quot;language-text&quot;&gt;npm init&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Do &lt;code class=&quot;language-text&quot;&gt;git init&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Install dependencies&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell=&quot;&gt;
+      &lt;pre class=&quot;language-shell=&quot;&gt;&lt;code class=&quot;language-shell=&quot;&gt;# React library
+npm install react react-dom&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;webpack&lt;/h1&gt;
+&lt;p&gt;npm install —save-dev webpack webpack-cli webpack-dev-server&lt;/p&gt;
+&lt;h1&gt;babel and wepack loader&lt;/h1&gt;
+&lt;h1&gt;notice: if using babel-loder@8, have to install @babel/core rather than babel-core&lt;/h1&gt;
+&lt;h1&gt;and also babel-preset-env -&gt; @babel/preset-env ,babel-preset-react -&gt; @babel/preset-react&lt;/h1&gt;
+&lt;p&gt;npm install —save-dev babel @babel/core babel-loader @babel/preset-react @babel/preset-env html-webpack-plugin&lt;/p&gt;
+&lt;h1&gt;css loader and plugin&lt;/h1&gt;
+&lt;p&gt;npm install —save-dev css-loader less  less-loader extract-text-webpack-plugin@next &lt;/p&gt;
+&lt;h1&gt;file and url loaders&lt;/h1&gt;
+&lt;p&gt;npm install —save-dev file-loader url-loader&lt;/p&gt;
+&lt;h1&gt;webpack plugin: clean the dist before every build&lt;/h1&gt;
+&lt;p&gt;npm install —save-dev clean-webpack-plugin&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;
+      &lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;## Setup
+### Webpack configs
+`webpack.config.js`
+```javascript=
+const path = require(&amp;#39;path&amp;#39;)
+const webpack = require(&amp;#39;webpack&amp;#39;)
+const HtmlWebpackPlugin = require(&amp;#39;html-webpack-plugin&amp;#39;)  // 將我們提供的 html 模板自動引入打包好的 JS、CSS 
+const ExtractTextWebpackPlugin = require(&amp;#39;extract-text-webpack-plugin&amp;#39;)    // 將 CSS 從 inline 拆出來成為獨立檔案
+const CleanWebpackPlugin = require(&amp;#39;clean-webpack-plugin&amp;#39;)  // 在每次打包前先清空目標資料夾
 
-// 新的用法
-&amp;lt;&amp;gt;
-  &amp;lt;p&amp;gt;First&amp;lt;/p&amp;gt;
-  &amp;lt;p&amp;gt;Second&amp;lt;/p&amp;gt;
-  &amp;lt;p&amp;gt;Thired&amp;lt;/p&amp;gt;
-&amp;lt;/&amp;gt;
+module.exports = env =&amp;gt; {
+    const config = require(&amp;#39;./env&amp;#39;)(env.NODE_ENV)
+    return {
+        entry: &amp;#39;./src/client/index.js&amp;#39;,     // 程式入口
+        output: {                           // 輸出
+            filename: &amp;#39;bundle.[hash:4].js&amp;#39;, // 打包後的文件名稱(增加 hash 是為了避免 cache)
+            path: path.resolve(&amp;#39;dist&amp;#39;)      // 打包後的路徑(必須是絕對路徑)
+        },
+        module: {
+            rules: [
+                {
+                    test: /\.css$/,
+                    use: ExtractTextWebpackPlugin.extract({
+                        use: &amp;#39;css-loader&amp;#39;,
+                        publicPath: &amp;#39;../&amp;#39;
+                    })
+                },
+                {
+                    test: /\.less$/,
+                    use: ExtractTextWebpackPlugin.extract({
+                        use: [&amp;#39;css-loader&amp;#39;, &amp;#39;less-loader&amp;#39;],
+                        publicPath: &amp;#39;../&amp;#39;
+                    })
+                },
+                {
+                    test: /\.(jpe?g|png|gif)$/,
+                    use: [
+                        {
+                            loader: &amp;#39;url-loader&amp;#39;,
+                            options: {
+                                limit: 8192,             // 小於 8K 會轉成 base64, 且不會存成實體圖片
+                                outputPath: &amp;#39;images/&amp;#39;    // 圖片打包後存放的路徑
+                            }
+                        }
+                    ]
+                },
+                {
+                    test: /\.(eot|ttf|woff|svg)/,
+                    use: &amp;#39;file-loader&amp;#39;
+                },
+                {
+                    test: /\.js$/,
+                    use: &amp;#39;babel-loader&amp;#39;,
+                    // include: /src/,            // 只會轉 src 目錄下的 JS 檔案
+                    exclude: /node_modules/    // 會排除掉 node_modules ，加快打包速度
+                }
+            ]
+        },    // 對應模組處理
+        plugins: [     // 插件
+            new CleanWebpackPlugin(&amp;#39;dist&amp;#39;),    // 每次打包前都先清空
+            new HtmlWebpackPlugin({
+                template: path.resolve(__dirname, &amp;#39;src/client/index.html&amp;#39;),  // 提供 HTML 模板，會自動將打包好的檔案引入
+                hash: true,                    // 如果有 hash 也會自動加上
+                wsUrl: config.url,             // 引入的變數，供 HTML template 使用   
+                env: env.NODE_ENV,
+            }),
+            new ExtractTextWebpackPlugin(&amp;#39;css/style.css&amp;#39;),    // 會把拆分成獨立檔案的 CSS 放到 dist 下面的 css/style.css        
+            // new webpack.HotModuleReplacementPlugin(),    // 除了在config中設定，在index.js(入口JS) 中也需要設定(Webpack 4 不需設定此 plugin)
+        ],
+        resolve: {
+            // 配置別名
+            // alias: {}
+            extensions: [&amp;#39;.js&amp;#39;, &amp;#39;json&amp;#39;]  // 用來省略後綴
+        },
+        devServer: {
+            // webpack 4 只需要在 flag 帶上需要的參數，以下全部都可以省略
+            // contentBase: &amp;#39;./dist&amp;#39;,
+            // publicPath: &amp;#39;/&amp;#39;,
+            // host: &amp;#39;localhost&amp;#39;,
+            // port: &amp;#39;3333&amp;#39;,
+            // open: true,               // 自動打開瀏覽器
+            // hot: true,                // hot reload
+            // inline: true
+        }, 
+        // mode: &amp;#39;development&amp;#39;          // 可以在 script 中給
+    }
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;webpack hot reload&lt;/strong&gt;
+&lt;code class=&quot;language-text&quot;&gt;index.js&lt;/code&gt;(入口JS)&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;// 增加了如下的判斷才會真正的自動更新
+// (Webpack 4 不需要)
+if (module.hot) {    
+    module.hot.accept();
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h3&gt;Babel&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;.babelrc&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;json=&quot;&gt;
+      &lt;pre class=&quot;language-json=&quot;&gt;&lt;code class=&quot;language-json=&quot;&gt;{
+    [&amp;quot;@babel/env&amp;quot;, &amp;quot;@babel/react&amp;quot;],    // 會從右向左解析    
+    &amp;quot;plugins&amp;quot;: [&amp;quot;@babel/plugin-proposal-class-properties&amp;quot;]  // 讓 class properties 可以正常運作
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h3&gt;Package.json&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;package.json&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;json=&quot;&gt;
+      &lt;pre class=&quot;language-json=&quot;&gt;&lt;code class=&quot;language-json=&quot;&gt;{
+  &amp;quot;name&amp;quot;: &amp;quot;react-chat-app&amp;quot;,
+  &amp;quot;version&amp;quot;: &amp;quot;1.0.0&amp;quot;,
+  &amp;quot;description&amp;quot;: &amp;quot;A chat APP made by react&amp;quot;,
+  &amp;quot;main&amp;quot;: &amp;quot;index.js&amp;quot;,
+  &amp;quot;scripts&amp;quot;: {
+    &amp;quot;dev&amp;quot;: &amp;quot;webpack-dev-server --mode development --hot --config webpack.config.js --env.NODE_ENV=dev&amp;quot;
+    &amp;quot;build&amp;quot;: &amp;quot;webpack --config webpack.config.js --env.NODE_ENV=production&amp;quot;,
+  },
+  &amp;quot;keywords&amp;quot;: [
+    &amp;quot;react&amp;quot;,
+    &amp;quot;socket.io&amp;quot;
+  ],
+  &amp;quot;author&amp;quot;: &amp;quot;Ben&amp;quot;,
+  &amp;quot;license&amp;quot;: &amp;quot;MIT&amp;quot;,
+  &amp;quot;dependencies&amp;quot;: {
+    &amp;quot;react&amp;quot;: &amp;quot;^16.6.1&amp;quot;,
+    &amp;quot;react-dom&amp;quot;: &amp;quot;^16.6.1&amp;quot;
+  },
+  &amp;quot;devDependencies&amp;quot;: {
+    &amp;quot;@babel/core&amp;quot;: &amp;quot;^7.1.5&amp;quot;,
+    &amp;quot;@babel/plugin-proposal-class-properties&amp;quot;: &amp;quot;^7.1.0&amp;quot;,
+    &amp;quot;@babel/preset-env&amp;quot;: &amp;quot;^7.1.5&amp;quot;,
+    &amp;quot;@babel/preset-react&amp;quot;: &amp;quot;^7.0.0&amp;quot;,
+    &amp;quot;babel&amp;quot;: &amp;quot;^6.23.0&amp;quot;,
+    &amp;quot;babel-loader&amp;quot;: &amp;quot;^8.0.4&amp;quot;,
+    &amp;quot;clean-webpack-plugin&amp;quot;: &amp;quot;^0.1.19&amp;quot;,
+    &amp;quot;css-loader&amp;quot;: &amp;quot;^1.0.1&amp;quot;,
+    &amp;quot;extract-text-webpack-plugin&amp;quot;: &amp;quot;^4.0.0-beta.0&amp;quot;,
+    &amp;quot;file-loader&amp;quot;: &amp;quot;^2.0.0&amp;quot;,
+    &amp;quot;html-webpack-plugin&amp;quot;: &amp;quot;^3.2.0&amp;quot;,
+    &amp;quot;less&amp;quot;: &amp;quot;^3.8.1&amp;quot;,
+    &amp;quot;less-loader&amp;quot;: &amp;quot;^4.1.0&amp;quot;,
+    &amp;quot;nodemon&amp;quot;: &amp;quot;^1.18.6&amp;quot;,
+    &amp;quot;react-router-dom&amp;quot;: &amp;quot;^4.3.1&amp;quot;,
+    &amp;quot;url-loader&amp;quot;: &amp;quot;^1.1.2&amp;quot;,
+    &amp;quot;webpack&amp;quot;: &amp;quot;^4.25.1&amp;quot;,
+    &amp;quot;webpack-cli&amp;quot;: &amp;quot;^3.1.2&amp;quot;,
+    &amp;quot;webpack-dev-server&amp;quot;: &amp;quot;^3.1.10&amp;quot;
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h3&gt;HTML template for webpack&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;index.html&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;htmlmixed=&quot;&gt;
+      &lt;pre class=&quot;language-htmlmixed=&quot;&gt;&lt;code class=&quot;language-htmlmixed=&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;meta charset=&amp;quot;UTF-8&amp;quot;&amp;gt;
+    &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, initial-scale=1.0&amp;quot;&amp;gt;
+    &amp;lt;meta http-equiv=&amp;quot;X-UA-Compatible&amp;quot; content=&amp;quot;ie=edge&amp;quot;&amp;gt;
+    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css&amp;quot; integrity=&amp;quot;sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u&amp;quot; crossorigin=&amp;quot;anonymous&amp;quot;&amp;gt;
+    &amp;lt;title&amp;gt;React Chat App&amp;lt;/title&amp;gt;
+    
+    &amp;lt;script&amp;gt;
+        window.env = &amp;lt;%= JSON.stringify(htmlWebpackPlugin.options.env) %&amp;gt;
+        window.wsUrl = &amp;lt;%= JSON.stringify(htmlWebpackPlugin.options.wsUrl) %&amp;gt;
+    &amp;lt;/script&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+    &amp;lt;div id=&amp;quot;app&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h3&gt;Main JS&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;index.js&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;import React from &amp;#39;react&amp;#39;
+import { render } from &amp;#39;react-dom&amp;#39;
+import App from &amp;#39;./components/App&amp;#39;
+import &amp;#39;./index.less&amp;#39;
 
-// 概念
-// 利用 HOC 直接回傳其 children 
-export default (props) =&amp;gt; props.children&lt;/code&gt;&lt;/pre&gt;
-      &lt;/div&gt;
-&lt;h2&gt;HOC(High Order Component)&lt;/h2&gt;
-&lt;p&gt;本質上只是一個函數，可以回傳 JSX、Stateless and Stateful component
-透過 HOC 可以將一些固定的邏輯抽取出來，或是增刪修改 state 或 props 。&lt;/p&gt;
-&lt;h4&gt;e.g.&lt;/h4&gt;
-&lt;p&gt;僅是把收到的 children 再回傳出去，也就是回傳 JSX&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
-      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;// Auxiliary(與 react 16.2 Fragments 一樣的作用)
+render(&amp;lt;App /&amp;gt;, document.getElementById(&amp;#39;app&amp;#39;))
 
-export default (props) =&amp;gt; props.children&lt;/code&gt;&lt;/pre&gt;
+// if (module.hot) module.hot.accept()&lt;/code&gt;&lt;/pre&gt;
       &lt;/div&gt;
-&lt;h4&gt;Usage&lt;/h4&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
-      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;render() {
-    return (
-      &amp;lt;Aux&amp;gt;
-        &amp;lt;Cockpit click={this.Addhandler}/&amp;gt;
-        &amp;lt;ErrorBoundary&amp;gt;
-          &amp;lt;Persons persons={this.state.persons}/&amp;gt;
-        &amp;lt;/ErrorBoundary&amp;gt;
-      &amp;lt;/Aux&amp;gt;
-    );
-  }&lt;/code&gt;&lt;/pre&gt;
-      &lt;/div&gt;
-&lt;h4&gt;e.g.&lt;/h4&gt;
-&lt;p&gt;回傳一個 stateless component，作用是把傳進來的組件再包裹一層使用者自訂的 class &lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
-      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;import React, { Component } from &amp;#39;react&amp;#39;
-
-const withClass = (Comp, classes) =&amp;gt; {
-    return props =&amp;gt; (
-        &amp;lt;div className={classes}&amp;gt; 
-            &amp;lt;Comp {...props}/&amp;gt;
-        &amp;lt;/div&amp;gt;
-    )
-}
-
-export default withClass&lt;/code&gt;&lt;/pre&gt;
-      &lt;/div&gt;
-&lt;h4&gt;Usage&lt;/h4&gt;
-&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;export default withClass(App, styles.App);&lt;/code&gt;&lt;/p&gt;
-&lt;h2&gt;PropTypes&lt;/h2&gt;
-&lt;p&gt;React 透過 PropTypes 來做類型檢測的功能。
-React v15.5 開始，已把 PropTypes 拆做獨立的 library。
-使用上需要另外安裝 &lt;code class=&quot;language-text&quot;&gt;npm install --save prop-types&lt;/code&gt;&lt;/p&gt;
-&lt;h4&gt;usage&lt;/h4&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
-      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;import PropTypes from &amp;#39;prop-types&amp;#39;
-
-const Example = (props) =&amp;gt; {
-  return (
-    &amp;lt;div&amp;gt;      
-      &amp;lt;p&amp;gt;{props.name}&amp;lt;/p&amp;gt;
-      &amp;lt;p&amp;gt;{props.age}&amp;lt;/p&amp;gt;
-    &amp;lt;/div&amp;gt;
-  )
-}
-
-Example.propTypes = {
-  name: PropTypes.string,
-  age: PropTypes.number
-}
-
-export default Example&lt;/code&gt;&lt;/pre&gt;
-      &lt;/div&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.css88.com/react/docs/typechecking-with-proptypes.html&quot;&gt;PropTypes 中文文檔&lt;/a&gt;&lt;/p&gt;
-&lt;h1&gt;React-router(V4) note&lt;/h1&gt;
-&lt;h2&gt;Install&lt;/h2&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
-      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;npm install --save react-router-dom&lt;/code&gt;&lt;/pre&gt;
-      &lt;/div&gt;
-&lt;h2&gt;Introduction&lt;/h2&gt;
-&lt;h4&gt;react-router 與 react-router-dom 的差別&lt;/h4&gt;
-&lt;p&gt;react-router-dom 是基於 react-router 並針對瀏覽器環境加入一些功能，像是 Link、BrowserRouter和HashRouter。其他與 react-router 中相同的方法則是將其再導出而已。所以瀏覽器環境下使用 react-router-dom 即可。&lt;/p&gt;
-&lt;h2&gt;Usage&lt;/h2&gt;
-&lt;p&gt;需要在最外層使用 HashRouter 或 BrowserRouter，差別如下:&lt;/p&gt;
-&lt;h4&gt;HashRouter&lt;/h4&gt;
-&lt;p&gt;通過hash值來對路由進行控制，所以網址內會有個#&lt;/p&gt;
-&lt;h4&gt;BrowserRouter&lt;/h4&gt;
-&lt;p&gt;基於HTML5 history API (pushState, replaceState, popState)，但可能會有相容性的問題&lt;/p&gt;
-&lt;h4&gt;Route&lt;/h4&gt;
-&lt;p&gt;用來控制對應的路由顯示對應的組件，常用的屬性exact、path 以及 component。&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
-      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;&amp;lt;Route exact path=&amp;quot;/&amp;quot; component={Homw} /&amp;gt;
-&amp;lt;Route path=&amp;quot;/about&amp;quot; component={About} /&amp;gt;
-&amp;lt;Route path=&amp;quot;/hello&amp;quot; render={() =&amp;gt; &amp;lt;h1&amp;gt;Hello&amp;lt;/h1} /&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-      &lt;/div&gt;
-&lt;p&gt;&lt;strong&gt;exact&lt;/strong&gt; 用來作完全匹配，預設為 false，會匹配 &lt;code class=&quot;language-text&quot;&gt;/about&lt;/code&gt;、&lt;code class=&quot;language-text&quot;&gt;/about/a&lt;/code&gt;、&lt;code class=&quot;language-text&quot;&gt;/about/b&lt;/code&gt;，改為 true 的話便只會匹配&lt;code class=&quot;language-text&quot;&gt;/about&lt;/code&gt;
-&lt;strong&gt;path&lt;/strong&gt; 用來設定要匹配的路徑
-&lt;strong&gt;component&lt;/strong&gt; 用來設定匹配後要顯示的組件
-&lt;strong&gt;render&lt;/strong&gt; 用來設定匹配後要顯示的東西&lt;/p&gt;
-&lt;h4&gt;Link、NavLink&lt;/h4&gt;
-&lt;p&gt;控制路由跳轉&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
-      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;&amp;lt;link to=&amp;quot;/about&amp;quot;/&amp;gt;
-&amp;lt;link to=&amp;quot;/about?name=windy&amp;quot;/&amp;gt;
-&amp;lt;link to={{
-     pathname:&amp;#39;/about&amp;#39;,
-     search:&amp;#39;?name=angel&amp;#39;,
-     hash:&amp;#39;#women&amp;#39;,
-     state:{fromDashboard:true}
-}}/&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-      &lt;/div&gt;
-&lt;h4&gt;Switch&lt;/h4&gt;
-&lt;p&gt;只渲染出第一個與當前訪問地址匹配的 Route 或 Redirect
-否則只要匹配的都會顯示&lt;/p&gt;
-&lt;h4&gt;Redirect&lt;/h4&gt;
-&lt;p&gt;重新導向&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
-      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;&amp;lt;Switch&amp;gt;
-  &amp;lt;Redirect from=&amp;#39;/users/:id&amp;#39; to=&amp;#39;/users/profile/:id&amp;#39;/&amp;gt;
-  &amp;lt;Route path=&amp;#39;/users/profile/:id&amp;#39; component={Profile}/&amp;gt;
-&amp;lt;/Switch&amp;gt;&lt;/code&gt;&lt;/pre&gt;
-      &lt;/div&gt;
-&lt;h4&gt;match&lt;/h4&gt;
-&lt;p&gt;match是在使用router之後被放入props中的一個屬性，在class創建的組件中我們需要通過this.props.match來獲取match之中的信息。match中包含的信息如下。
-&lt;img src=&quot;https://i.imgur.com/btstriI.png&quot;&gt;&lt;/p&gt;
-&lt;h3&gt;參考來源&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;http://www.ucamc.com/e-learning/javascript/278-%E7%B0%A1%E5%96%AE%E4%BB%8B%E7%B4%B9%E4%BA%86%E8%A7%A3react-router-4%E6%95%99%E5%AD%B8.html&quot;&gt;一探究竟了解React-router 4簡易教學&lt;/a&gt;
-&lt;a href=&quot;https://hk.saowen.com/a/73172216c8b96ab4f135316b229c9d578a81be535f5c7feb4b06cc032a99c1d3&quot;&gt;React 快速上手 - 07 前端路由 react-router&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Junior to Senior Web Developer Roadmap (Part I)]]></title><description><![CDATA[SSH Create a connection Performance I Uglify JS, CSS… 透過刪除空白、最小化命名來壓縮檔案，來達到節省流量
+&lt;h2&gt;Project structure&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/CCVILat.png&quot;&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Junior to Senior Web Developer Roadmap (Part I)]]></title><description><![CDATA[SSH Create a connection Performance I Uglify JS, CSS… 透過刪除空白、最小化命名來壓縮檔案，來達到節省流量
  線上 Uglify 工具 Minimize Images 依照合適的用途來選擇檔案格式 :
 小動畫: GIF…]]></description><link>https://gatsby-starter-personal-blog.greglobinski.com/junior-to-senior-part1/</link><guid isPermaLink="false">https://gatsby-starter-personal-blog.greglobinski.com/junior-to-senior-part1/</guid><content:encoded>&lt;h2&gt;SSH&lt;/h2&gt;
 &lt;h3&gt;Create a connection&lt;/h3&gt;
@@ -1007,4 +1076,146 @@ export default Person&lt;/code&gt;&lt;/pre&gt;
 &lt;h2&gt;How React Updates The DOM&lt;/h2&gt;
 &lt;p&gt;並不是執行了 render 方法後，就一定會更新。
 React 會透過比較 virtual DOM 來確認是否需要更新，需要才會真正的去操作 DOM，藉此來優化效能。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/kqLfoZz.png&quot;&gt;&lt;/p&gt;</content:encoded></item></channel></rss>
+&lt;p&gt;&lt;img src=&quot;https://i.imgur.com/kqLfoZz.png&quot;&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Basics of react and react-router (Part II)]]></title><description><![CDATA[Fragments React 16.2 Feature
+可以不用額外包一層div HOC(High Order Component) 本質上只是一個函數，可以回傳 JSX、Stateless and Stateful component
+透過 HOC…]]></description><link>https://gatsby-starter-personal-blog.greglobinski.com/react-note-part2/</link><guid isPermaLink="false">https://gatsby-starter-personal-blog.greglobinski.com/react-note-part2/</guid><content:encoded>&lt;h2&gt;Fragments&lt;/h2&gt;
+&lt;p&gt;React 16.2 Feature
+可以不用額外包一層div&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;// 原來的寫法
+&amp;lt;div&amp;gt;        
+  &amp;lt;p&amp;gt;First&amp;lt;/p&amp;gt;
+  &amp;lt;p&amp;gt;Second&amp;lt;/p&amp;gt;
+  &amp;lt;p&amp;gt;Thired&amp;lt;/p&amp;gt;
+&amp;lt;/div&amp;gt;
+
+// 新的用法
+&amp;lt;&amp;gt;
+  &amp;lt;p&amp;gt;First&amp;lt;/p&amp;gt;
+  &amp;lt;p&amp;gt;Second&amp;lt;/p&amp;gt;
+  &amp;lt;p&amp;gt;Thired&amp;lt;/p&amp;gt;
+&amp;lt;/&amp;gt;
+
+// 概念
+// 利用 HOC 直接回傳其 children 
+export default (props) =&amp;gt; props.children&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h2&gt;HOC(High Order Component)&lt;/h2&gt;
+&lt;p&gt;本質上只是一個函數，可以回傳 JSX、Stateless and Stateful component
+透過 HOC 可以將一些固定的邏輯抽取出來，或是增刪修改 state 或 props 。&lt;/p&gt;
+&lt;h4&gt;e.g.&lt;/h4&gt;
+&lt;p&gt;僅是把收到的 children 再回傳出去，也就是回傳 JSX&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;// Auxiliary(與 react 16.2 Fragments 一樣的作用)
+
+export default (props) =&amp;gt; props.children&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;Usage&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;render() {
+    return (
+      &amp;lt;Aux&amp;gt;
+        &amp;lt;Cockpit click={this.Addhandler}/&amp;gt;
+        &amp;lt;ErrorBoundary&amp;gt;
+          &amp;lt;Persons persons={this.state.persons}/&amp;gt;
+        &amp;lt;/ErrorBoundary&amp;gt;
+      &amp;lt;/Aux&amp;gt;
+    );
+  }&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;e.g.&lt;/h4&gt;
+&lt;p&gt;回傳一個 stateless component，作用是把傳進來的組件再包裹一層使用者自訂的 class &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;import React, { Component } from &amp;#39;react&amp;#39;
+
+const withClass = (Comp, classes) =&amp;gt; {
+    return props =&amp;gt; (
+        &amp;lt;div className={classes}&amp;gt; 
+            &amp;lt;Comp {...props}/&amp;gt;
+        &amp;lt;/div&amp;gt;
+    )
+}
+
+export default withClass&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;Usage&lt;/h4&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;export default withClass(App, styles.App);&lt;/code&gt;&lt;/p&gt;
+&lt;h2&gt;PropTypes&lt;/h2&gt;
+&lt;p&gt;React 透過 PropTypes 來做類型檢測的功能。
+React v15.5 開始，已把 PropTypes 拆做獨立的 library。
+使用上需要另外安裝 &lt;code class=&quot;language-text&quot;&gt;npm install --save prop-types&lt;/code&gt;&lt;/p&gt;
+&lt;h4&gt;usage&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;import PropTypes from &amp;#39;prop-types&amp;#39;
+
+const Example = (props) =&amp;gt; {
+  return (
+    &amp;lt;div&amp;gt;      
+      &amp;lt;p&amp;gt;{props.name}&amp;lt;/p&amp;gt;
+      &amp;lt;p&amp;gt;{props.age}&amp;lt;/p&amp;gt;
+    &amp;lt;/div&amp;gt;
+  )
+}
+
+Example.propTypes = {
+  name: PropTypes.string,
+  age: PropTypes.number
+}
+
+export default Example&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.css88.com/react/docs/typechecking-with-proptypes.html&quot;&gt;PropTypes 中文文檔&lt;/a&gt;&lt;/p&gt;
+&lt;h1&gt;React-router(V4) note&lt;/h1&gt;
+&lt;h2&gt;Install&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;npm install --save react-router-dom&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h2&gt;Introduction&lt;/h2&gt;
+&lt;h4&gt;react-router 與 react-router-dom 的差別&lt;/h4&gt;
+&lt;p&gt;react-router-dom 是基於 react-router 並針對瀏覽器環境加入一些功能，像是 Link、BrowserRouter和HashRouter。其他與 react-router 中相同的方法則是將其再導出而已。所以瀏覽器環境下使用 react-router-dom 即可。&lt;/p&gt;
+&lt;h2&gt;Usage&lt;/h2&gt;
+&lt;p&gt;需要在最外層使用 HashRouter 或 BrowserRouter，差別如下:&lt;/p&gt;
+&lt;h4&gt;HashRouter&lt;/h4&gt;
+&lt;p&gt;通過hash值來對路由進行控制，所以網址內會有個#&lt;/p&gt;
+&lt;h4&gt;BrowserRouter&lt;/h4&gt;
+&lt;p&gt;基於HTML5 history API (pushState, replaceState, popState)，但可能會有相容性的問題&lt;/p&gt;
+&lt;h4&gt;Route&lt;/h4&gt;
+&lt;p&gt;用來控制對應的路由顯示對應的組件，常用的屬性exact、path 以及 component。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;&amp;lt;Route exact path=&amp;quot;/&amp;quot; component={Homw} /&amp;gt;
+&amp;lt;Route path=&amp;quot;/about&amp;quot; component={About} /&amp;gt;
+&amp;lt;Route path=&amp;quot;/hello&amp;quot; render={() =&amp;gt; &amp;lt;h1&amp;gt;Hello&amp;lt;/h1} /&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;exact&lt;/strong&gt; 用來作完全匹配，預設為 false，會匹配 &lt;code class=&quot;language-text&quot;&gt;/about&lt;/code&gt;、&lt;code class=&quot;language-text&quot;&gt;/about/a&lt;/code&gt;、&lt;code class=&quot;language-text&quot;&gt;/about/b&lt;/code&gt;，改為 true 的話便只會匹配&lt;code class=&quot;language-text&quot;&gt;/about&lt;/code&gt;
+&lt;strong&gt;path&lt;/strong&gt; 用來設定要匹配的路徑
+&lt;strong&gt;component&lt;/strong&gt; 用來設定匹配後要顯示的組件
+&lt;strong&gt;render&lt;/strong&gt; 用來設定匹配後要顯示的東西&lt;/p&gt;
+&lt;h4&gt;Link、NavLink&lt;/h4&gt;
+&lt;p&gt;控制路由跳轉&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;&amp;lt;link to=&amp;quot;/about&amp;quot;/&amp;gt;
+&amp;lt;link to=&amp;quot;/about?name=windy&amp;quot;/&amp;gt;
+&amp;lt;link to={{
+     pathname:&amp;#39;/about&amp;#39;,
+     search:&amp;#39;?name=angel&amp;#39;,
+     hash:&amp;#39;#women&amp;#39;,
+     state:{fromDashboard:true}
+}}/&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;Switch&lt;/h4&gt;
+&lt;p&gt;只渲染出第一個與當前訪問地址匹配的 Route 或 Redirect
+否則只要匹配的都會顯示&lt;/p&gt;
+&lt;h4&gt;Redirect&lt;/h4&gt;
+&lt;p&gt;重新導向&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript=&quot;&gt;
+      &lt;pre class=&quot;language-javascript=&quot;&gt;&lt;code class=&quot;language-javascript=&quot;&gt;&amp;lt;Switch&amp;gt;
+  &amp;lt;Redirect from=&amp;#39;/users/:id&amp;#39; to=&amp;#39;/users/profile/:id&amp;#39;/&amp;gt;
+  &amp;lt;Route path=&amp;#39;/users/profile/:id&amp;#39; component={Profile}/&amp;gt;
+&amp;lt;/Switch&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+      &lt;/div&gt;
+&lt;h4&gt;match&lt;/h4&gt;
+&lt;p&gt;match是在使用router之後被放入props中的一個屬性，在class創建的組件中我們需要通過this.props.match來獲取match之中的信息。match中包含的信息如下。
+&lt;img src=&quot;https://i.imgur.com/btstriI.png&quot;&gt;&lt;/p&gt;
+&lt;h3&gt;參考來源&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.ucamc.com/e-learning/javascript/278-%E7%B0%A1%E5%96%AE%E4%BB%8B%E7%B4%B9%E4%BA%86%E8%A7%A3react-router-4%E6%95%99%E5%AD%B8.html&quot;&gt;一探究竟了解React-router 4簡易教學&lt;/a&gt;
+&lt;a href=&quot;https://hk.saowen.com/a/73172216c8b96ab4f135316b229c9d578a81be535f5c7feb4b06cc032a99c1d3&quot;&gt;React 快速上手 - 07 前端路由 react-router&lt;/a&gt;&lt;/p&gt;</content:encoded></item></channel></rss>
